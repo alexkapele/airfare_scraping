@@ -3,7 +3,6 @@ import pandas as pd
 from google_flights_scraper import get_google_flights_data
 from datetime import timedelta, date
 
-
 def daterange(date1, date2):
     date1 = date(int(date1[:4]),int(date1[5:7]),int(date1[8:10]))
     date2 = date(int(date2[:4]),int(date2[5:7]),int(date2[8:10]))
@@ -14,20 +13,18 @@ def daterange(date1, date2):
     return dates
 
 #Scraping parameters
-origin = 'ATH'
-dest = 'SKG'
+origin = 'LHR'
+dest = 'ATH'
 currency = 'GBP'
 non_stop = True
 
 #Scraping dates
-start_date = '2020-06-20'
-end_date = '2020-06-22'
+start_date = '2020-04-15'
+end_date = '2020-07-31'
 dates = daterange(start_date, end_date)
 
 
-data = pd.DataFrame()
-for date_ in dates:
-    data = data.append(get_google_flights_data(origin,dest,date_,currency,non_stop=True,save_csv=False),ignore_index=True)
+data = get_google_flights_data(origin,dest,dates,currency,non_stop=True,save_csv=False,headless=True)
 
 
 filename = origin + '-' + dest + '_' + 'fares.csv'
