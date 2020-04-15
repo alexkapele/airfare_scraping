@@ -53,23 +53,24 @@ def get_google_flights_data(origin,dest,dates,currency,non_stop=True,save_csv=Tr
         for airline in soup.find_all('span', attrs={'class': 'gws-flights__ellipsize'}):
             airlines.append(airline.getText())
         airlines = airlines[::2]
-        airlines
         
         #Extract times
         times = []
         for time_ in soup.find_all('div', attrs={'class': 'gws-flights-results__times flt-subhead1'}):
-            times.append(time_.getText()[2:-3])
-        times
+            times.append(time_.getText().strip())
         
         #Extract prices (cheapest and other)
         prices = []
-        for price in soup.find_all('div', attrs={'class': 'flt-subhead1 gws-flights-results__price gws-flights-results__cheapest-price'}) :
-            prices.append(price.getText()[6:-3])
+        for price in soup.find_all('div', attrs={'class': 'flt-subhead1 gws-flights-results__price gws-flights-results__cheapest-price'}):
+            price = price.getText()
+            price = price[re.search(r"\d", price).start():].strip()
+            prices.append(price)
         
         for price in soup.find_all('div', attrs={'class': 'flt-subhead1 gws-flights-results__price'}) :
-            prices.append(price.getText()[6:-3])
+            price = price.getText()
+            price = price[re.search(r"\d", price).start():].strip()
+            prices.append(price)
         prices = prices[::2]
-        prices
         
         
         data_date = pd.DataFrame()
@@ -86,17 +87,14 @@ def get_google_flights_data(origin,dest,dates,currency,non_stop=True,save_csv=Tr
             data_date['Arr Time (local)'] = data_date['Time'].str.split('–').str[1]
             data_date['Arr Time (local)'] = data_date['Arr Time (local)'].str.strip()
             data_date = data_date.drop(['Time'], axis=1)
-            
-            #Seperate price and currency
-            data_date['Currency'] = currency
-            data_date['Price'] = data_date['Price'].apply(lambda x: x[re.search(r"\d", x).start():])
-            
-            #Add Other info
+                        
+            #Add other info
             data_date['Origin'] = origin
             data_date['Destination'] = dest
             data_date['Flight Date'] = date
             data_date['Flight Date'] = pd.to_datetime(data_date['Flight Date'])
             data_date['Weekday'] = data_date['Flight Date'].dt.weekday_name
+            data_date['Currency'] = currency
             data_date['Fare Extraction Date'] = datetime.today().strftime('%Y-%m-%d')
             data_date['Fare Extraction Date'] = pd.to_datetime(data_date['Fare Extraction Date'])
             
@@ -106,8 +104,8 @@ def get_google_flights_data(origin,dest,dates,currency,non_stop=True,save_csv=Tr
             #Append date's results to data
             data = data.append(data_date, ignore_index=True)
             
-            #Print progress indicator 
-            print(str(i+1) + '/' + str(len(dates)) + ' days scraped')
+        #Print progress indicator 
+        print(str(i+1) + '/' + str(len(dates)) + ' days scraped')
             
     #Save data
     if save_csv:
