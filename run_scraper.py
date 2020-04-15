@@ -13,14 +13,14 @@ def daterange(date1, date2):
     return dates
 
 #Scraping parameters
-origin = 'LHR'
+origin = 'STN'
 dest = 'ATH'
 currency = 'GBP'
 non_stop = True
 
 #Scraping dates
-start_date = '2020-04-15'
-end_date = '2020-07-31'
+start_date = '2020-04-16'
+end_date = '2020-12-31'
 dates = daterange(start_date, end_date)
 
 
