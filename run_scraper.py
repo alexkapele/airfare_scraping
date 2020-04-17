@@ -12,14 +12,19 @@ def daterange(date1, date2):
         dates.append(date_.strftime("%Y-%m-%d"))
     return dates
 
+
 #Scraping parameters
-origin = 'STN'
-dest = 'ATH'
+#/m/04jpl - London All
+#/m/05qtj - Paris All
+#/m/02_286 - New York All
+#/m/06c62 - Rome All
+origin = 'London'
+dest = 'AMS'
 currency = 'GBP'
 non_stop = True
 
 #Scraping dates
-start_date = '2020-04-16'
+start_date = '2020-04-18'
 end_date = '2020-12-31'
 dates = daterange(start_date, end_date)
 
