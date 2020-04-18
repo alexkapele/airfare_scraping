@@ -4,6 +4,6 @@ Web scraping tool that collects data from Google Flights for selected routes & d
 
 ### Prerequisites
 
-* [Python 3.7]
+* Python 3.7
 * [Selenium](https://selenium-python.readthedocs.io/)
 * [ChromeDriver](https://chromedriver.chromium.org/downloads)
